@@ -1,10 +1,10 @@
 [package]
 name = "sod-mpsc"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 authors = ["Eric Thill"]
-repository = "https://github.com/thill/sod"
+repository = "https://github.com/thill/sod-mpsc"
 description = "Service Oriented Design - Multi Producer Single Consumer"
 keywords = ["service", "pattern"]
 categories = ["rust-patterns"]
