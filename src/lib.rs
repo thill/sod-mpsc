@@ -24,7 +24,7 @@
 //! assert_eq!(poller.process(()).unwrap(), 2);
 //! ```
 
-use sod::{RetryError, RetryableService, Service};
+use sod::{RetryError, Retryable, Service};
 use std::sync::mpsc::{
     Receiver, RecvError, SendError, Sender, SyncSender, TryRecvError, TrySendError,
 };
@@ -65,7 +65,7 @@ impl<T> Service<T> for MpscSyncSender<T> {
     }
 }
 
-/// A non-blocking [`sod::Service`] that sends to an underlying [`std::sync::mpsc::SyncSender`] using the `try_send` function.
+/// A non-blocking [`sod::Service`] that is [`sod::Retryable`] and sends to an underlying [`std::sync::mpsc::SyncSender`] using the `try_send` function.
 #[derive(Clone)]
 pub struct MpscSyncTrySender<T> {
     tx: SyncSender<T>,
@@ -82,7 +82,7 @@ impl<T> Service<T> for MpscSyncTrySender<T> {
         self.tx.try_send(input)
     }
 }
-impl<T> RetryableService<T, TrySendError<T>> for MpscSyncTrySender<T> {
+impl<T> Retryable<T, TrySendError<T>> for MpscSyncTrySender<T> {
     fn parse_retry(&self, err: TrySendError<T>) -> Result<T, RetryError<TrySendError<T>>> {
         match err {
             TrySendError::Full(input) => Ok(input),
@@ -108,7 +108,7 @@ impl<T> Service<()> for MpscReceiver<T> {
     }
 }
 
-/// A non-blocking [`sod::Service`] that receives from an underlying [`std::sync::mpsc::Receiver`], blocking per the rules of `Receiver::recv`
+/// A non-blocking [`sod::Service`] that is [`sod::Retryable`] and receives from an underlying [`std::sync::mpsc::Receiver`], blocking per the rules of `Receiver::recv`
 pub struct MpscTryReceiver<T> {
     rx: Receiver<T>,
 }
@@ -124,7 +124,7 @@ impl<T> Service<()> for MpscTryReceiver<T> {
         self.rx.try_recv()
     }
 }
-impl<T> RetryableService<(), TryRecvError> for MpscTryReceiver<T> {
+impl<T> Retryable<(), TryRecvError> for MpscTryReceiver<T> {
     fn parse_retry(&self, err: TryRecvError) -> Result<(), RetryError<TryRecvError>> {
         match err {
             TryRecvError::Empty => Ok(()),

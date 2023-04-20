@@ -8,7 +8,7 @@
 - `MpscSyncSender` sends to a `std::sync::mpsc::sync_channel` and blocks if the channel is full.
 - `MpscSyncTrySender` tries to send to a `std::sync::mpsc::sync_channel` and is able to be retried via `sod::RetryService` when the channel is full.
 - `MpscReceiver` receives from a `std::sync::mpsc::channel` or `std::sync::mpsc::sync_channel`, blocking until an element is received.
-- `MpscTryReceiver` tries to receive from a `std::sync::mpsc::channel` or `std::sync::mpsc::sync_channel`, and is able to be retried via `sod::RetryService` when the channel is empty.
+- `MpscTryReceiver` tries to receive from a `std::sync::mpsc::channel` or `std::sync::mpsc::sync_channel`, and is able to be retried via `sod::Retryable` when the channel is empty.
 
 ## Example
 
