@@ -39,7 +39,8 @@ impl<T> MpscSender<T> {
         Self { tx }
     }
 }
-impl<T> Service<T> for MpscSender<T> {
+impl<T> Service for MpscSender<T> {
+    type Input = T;
     type Output = ();
     type Error = SendError<T>;
     fn process(&self, input: T) -> Result<Self::Output, Self::Error> {
@@ -57,7 +58,8 @@ impl<T> MpscSyncSender<T> {
         Self { tx }
     }
 }
-impl<T> Service<T> for MpscSyncSender<T> {
+impl<T> Service for MpscSyncSender<T> {
+    type Input = T;
     type Output = ();
     type Error = SendError<T>;
     fn process(&self, input: T) -> Result<Self::Output, Self::Error> {
@@ -75,7 +77,8 @@ impl<T> MpscSyncTrySender<T> {
         Self { tx }
     }
 }
-impl<T> Service<T> for MpscSyncTrySender<T> {
+impl<T> Service for MpscSyncTrySender<T> {
+    type Input = T;
     type Output = ();
     type Error = TrySendError<T>;
     fn process(&self, input: T) -> Result<Self::Output, Self::Error> {
@@ -100,7 +103,8 @@ impl<T> MpscReceiver<T> {
         Self { rx }
     }
 }
-impl<T> Service<()> for MpscReceiver<T> {
+impl<T> Service for MpscReceiver<T> {
+    type Input = ();
     type Output = T;
     type Error = RecvError;
     fn process(&self, _: ()) -> Result<Self::Output, Self::Error> {
@@ -117,7 +121,8 @@ impl<T> MpscTryReceiver<T> {
         Self { rx }
     }
 }
-impl<T> Service<()> for MpscTryReceiver<T> {
+impl<T> Service for MpscTryReceiver<T> {
+    type Input = ();
     type Output = T;
     type Error = TryRecvError;
     fn process(&self, _: ()) -> Result<Self::Output, Self::Error> {
